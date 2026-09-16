@@ -54,9 +54,10 @@ def extract_page_streams(path):
 
 def main():
     files = sorted(glob.glob(os.path.join(BOOKS_DIR, "*.pdf")))
+    WRITER = "Daniel Tesfamariam"
     doc = pdfkit.Document(
         title="Christian Study Workbooks for Ages 13-19 - Complete Collection",
-        author="Christian Homeschool Press")
+        author=WRITER)
     PW, PH = pdfkit.LETTER
 
     # ---- master cover ----
@@ -72,7 +73,9 @@ def main():
     c.set_fill(0.78, 0.60, 0.16)
     c.rect(60, PH - 250, 130, 3, fill=True, stroke=False)
     c.set_fill(0.90, 0.92, 0.96)
-    c.wrap_text(60, PH - 278, "Ten complete study workbooks for teens and young adults, ages 13-19 — devotionals, inductive Bible study, word studies, reflection, and application.", 14, PW - 130, leading=20)
+    subend = c.wrap_text(60, PH - 278, "Ten complete study workbooks for teens and young adults, ages 13-19 — devotionals, inductive Bible study, word studies, reflection, and application.", 14, PW - 130, leading=20)
+    c.set_fill(0.78, 0.60, 0.16)
+    c.text(60, subend - 8, "Written by " + WRITER, 14, bold=True)
     # emblem: open book + cross
     cx, cy = PW / 2, 380
     c.set_stroke(1, 1, 1); c.set_line_width(2)

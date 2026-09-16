@@ -38,8 +38,9 @@ CW = PW - 2 * MARGIN  # content width
 
 
 class Teenbook:
-    def __init__(self, title, subtitle, accent=NAVY, accent2=GOLD, series="Faith Foundations Study Series"):
-        self.doc = pdfkit.Document(title=title, author="Christian Homeschool Press")
+    def __init__(self, title, subtitle, accent=NAVY, accent2=GOLD, series="Faith Foundations Study Series", writer="Daniel Tesfamariam"):
+        self.writer = writer
+        self.doc = pdfkit.Document(title=title, author=writer)
         self.title = title
         self.subtitle = subtitle
         self.accent = accent
@@ -215,7 +216,10 @@ class Teenbook:
         p.rect(MARGIN, endy - 6, 120, 3, fill=True, stroke=False)
         # subtitle
         p.set_fill(0.90, 0.92, 0.96)
-        p.wrap_text(MARGIN, endy - 32, self.subtitle, 14, CW - 40, leading=20)
+        suby = p.wrap_text(MARGIN, endy - 32, self.subtitle, 14, CW - 40, leading=20)
+        # writer byline
+        p.set_fill(*self.accent2)
+        p.text(MARGIN, suby - 6, "Written by " + self.writer, 13, bold=True)
         # central line-art emblem: open book + cross
         self._emblem(p, PW / 2, PH / 2 - 60, 120)
         # age badge
