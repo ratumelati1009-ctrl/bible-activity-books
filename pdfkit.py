@@ -38,11 +38,32 @@ _HELV_WIDTHS = {
 _HELVB_WIDTHS = {k: int(v * 1.02) + (0 if v > 600 else 20) for k, v in _HELV_WIDTHS.items()}
 
 
+# Map Unicode punctuation not present in Latin-1 to safe equivalents so text
+# never renders as "?" placeholders.
+_PUNCT = {
+    '\u2013': '-', '\u2014': '-', '\u2012': '-', '\u2212': '-',   # dashes
+    '\u2018': "'", '\u2019': "'", '\u201a': ',', '\u201b': "'",   # single quotes
+    '\u201c': '"', '\u201d': '"', '\u201e': '"',                   # double quotes
+    '\u2026': '...', '\u2022': '-', '\u00b7': '-', '\u2027': '-',  # ellipsis, bullets
+    '\u00a0': ' ', '\u2032': "'", '\u2033': '"',                   # nbsp, primes
+    '\u2192': '->', '\u2190': '<-',                                # arrows
+}
+
+
+def _normalize(s):
+    for k, v in _PUNCT.items():
+        if k in s:
+            s = s.replace(k, v)
+    return s
+
+
 def _esc(s):
+    s = _normalize(s)
     return s.replace('\\', r'\\').replace('(', r'\(').replace(')', r'\)')
 
 
 def text_width(s, size, bold=False):
+    s = _normalize(s)
     table = _HELVB_WIDTHS if bold else _HELV_WIDTHS
     total = 0
     for ch in s:
